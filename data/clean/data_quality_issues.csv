@@ -1,17 +1,16 @@
 n,priority,issue,detail
-1,Higher,Only resolved tickets are included,"Backlog, net change and the resolved-to-created ratio have nothing to measure."
-2,Higher,The resolved series is cut off at the end of the window,"10 tickets resolve after the last creation day, so the final day of a range is not comparable."
-3,Higher,Short and old history,"13 days, 26 Jun to 8 Jul 2022. A 30-day default view would be mostly empty."
-4,Higher,Turnaround time is synthetic,"Resolution is creation plus 15-45 whole minutes, with identical milliseconds. Label it, do not read it as performance."
-5,Higher,Two conflicting fields describe the language,language_dwid defaults to English and breaks on 4 July. The queue from Ticket Type is used instead.
-6,Higher,Demand falls steadily across the period,"About 2,100 tickets a day down to about 1,050. Confirm it is genuine before reporting it as a trend."
-7,Higher,18 'Helpdesk communication' tickets are a group of their own,"Unknown language, null refund flags, no queue or request type. Labelled Unclassified so they stay visible."
-8,Lower,processing_type is always 'Manual',"Either nothing is automated, or automated tickets are missing from the extract."
-9,Lower,Refund flags are set on some non-refund tickets,"25 and 26 tickets respectively. The flags look booking-level, so they cannot be summed per ticket."
-10,Lower,Japanese and Korean queues are not split by refund,A refund breakdown is not comparable across every queue.
-11,Lower,Dates in the language table are stored inconsistently,"date_valid_from is text, date_valid_to is a date. Placeholder values of 1899 and 2999."
-12,Lower,Two columns in the language table carry nothing,"is_valid is always true, and name and description are identical in all 185 rows."
-13,Observation,Most of the language table is unused,"185 rows, 40 used, 16 of those with fewer than 5 tickets."
-14,Observation,Timestamps are UTC,Every daily figure is a UTC day and will not match a local working day everywhere.
-15,Observation,Timestamps are precise to the millisecond,Spreadsheets display them truncated to the minute. Fine for daily or hourly reporting.
-16,Observation,About 9% of bookings generate more than one ticket,Repeat contact is worth reporting on its own.
+1,Higher,Turnaround time is synthetic,"Resolution is creation plus 15-45 whole minutes, carrying the identical millisecond. Breaks every measure of speed. Fixing it also makes issue 2 testable."
+2,Higher,The population is unverifiable,"Every row carries a resolution and every row is processing_type = Manual, so automated or still-open tickets may never have reached the extract. Nothing bounds how many, because the timestamps that would are the generated ones. Every count is a floor, not a total."
+3,Higher,Short and old history,"13 days, 26 Jun to 8 Jul 2022. No seasonality, one like-for-like week-over-week comparison, and four-year-old data is not operational."
+4,Higher,Two conflicting fields describe the language,"language_dwid disagrees with the queue on 3,239 tickets, always toward English, and steps on 4 July. Mitigated by using the queue, at the cost of per-language detail."
+5,Higher,We cannot tell whether the demand decline is real,"Intake falls from about 2,100 a day to about 1,050. Not a calendar effect, but a genuine decline and an extraction artefact look identical given issue 2."
+6,Lower,The resolved series is cut off at the end of the window,10 tickets resolve after the last creation day. Daily counts are not truncated; the effect is confined to the first day of a filtered range.
+7,Lower,18 'Helpdesk communication' tickets are a group of their own,"Unknown language, null refund flags, no queue or request type. Labelled Unclassified so they stay visible. 0.09% of rows."
+8,Lower,Refund flags are set on some non-refund tickets,"25 and 26 tickets respectively. They look booking-level, but every positive flag sits on a single-ticket booking, so that cannot be tested. Refund volume is unaffected."
+9,Lower,Japanese and Korean queues are not split by refund,A refund breakdown is not comparable across every queue.
+10,Lower,Timestamps are UTC,Every daily figure is a UTC day - nine hours out of step with the local working day for the Japanese queue.
+11,Observation,Dates in the language table are stored inconsistently,"date_valid_from is text, date_valid_to is a date, both with 1899/2999 placeholders. The table is not used beyond name lookup."
+12,Observation,Two columns in the language table carry nothing,"is_valid is always true, and name and description are identical in all 185 rows."
+13,Observation,Most of the language table is unused,"185 rows, 40 referenced, 16 of those with fewer than 5 tickets."
+14,Observation,Timestamps are precise to the millisecond,Spreadsheets display them truncated to the minute. Finer than the documentation claims.
+15,Observation,About 9% of bookings generate more than one ticket,Not a defect - an insight. Repeat contact hints at tickets not being resolved first time.

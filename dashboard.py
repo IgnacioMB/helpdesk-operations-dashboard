@@ -81,6 +81,14 @@ if df.empty:
     st.warning("No tickets match the current filters. Widen the selection in the sidebar.")
     st.stop()
 
+st.markdown(
+    '<div class="dq-strip"><b>This dashboard is a work in progress.</b> We have identified '
+    'data issues in the source data and are currently investigating them. Please do not draw '
+    'conclusions from this dashboard until further notice. '
+    '<b>Browse the <i>Data &amp; quality</i> tab</b> to see every issue we have found, how '
+    'serious each one is, and which numbers it affects.</div>',
+    unsafe_allow_html=True)
+
 CAL_DAYS = len(calendar_days(d_from, d_to))
 WEEKDAY_N = weekday_occurrences(d_from, d_to)
 
@@ -164,19 +172,17 @@ with tab_dash:
                        foot=f"{resolved_pd:,.0f} a day"
                             + (f"; {spill} closed after the window" if spill else "")),
                   unsafe_allow_html=True)
-    c[2].markdown(tile("Backlog", f"{backlog_now:,}", caution="data issues",
+    c[2].markdown(tile("Backlog", f"{backlog_now:,}",
                        foot="How big the pile is — every ticket still open at 23:59 on the "
                             "last day, whenever it arrived"),
                   unsafe_allow_html=True)
-    c[3].markdown(tile("Median TAT", f"{med_tat:,.0f}", "min", kind="warn",
-                       caution="data issues"),
+    c[3].markdown(tile("Median TAT", f"{med_tat:,.0f}", "min", kind="warn"),
                   unsafe_allow_html=True)
-    c[4].markdown(tile("P90 TAT", f"{p90_tat:,.0f}", "min", kind="warn",
-                       caution="data issues"),
+    c[4].markdown(tile("P90 TAT", f"{p90_tat:,.0f}", "min", kind="warn"),
                   unsafe_allow_html=True)
 
     # ------------------------------------------------------------ demand
-    st.markdown('<div class="sec">Demand against the week before</div>'
+    st.markdown('<div class="sec">Demand against the week before </div>'
                 '<div class="sec-sub">Each day next to the same weekday a week earlier, with the '
                 'ratio on the right axis. Comparing like weekdays is what makes the change '
                 'readable — a Sunday against a Monday is not a trend. The first week of any '
@@ -190,7 +196,7 @@ with tab_dash:
                 "Widen the date range to at least eight days to see the comparison.")
 
     # ------------------------------------------------- created vs resolved
-    st.markdown('<div class="sec">Tickets created and resolved per day</div>'
+    st.markdown('<div class="sec">Tickets created and resolved per day </div>'
                 '<div class="sec-sub">The two lines sit on top of each other: intake is cleared '
                 'the same day, so the team is not accumulating a backlog. Resolved counts tickets '
                 '<i>created</i> in this window, by the day they closed.</div>',
@@ -205,7 +211,7 @@ with tab_dash:
     else:
         st.caption(gran_note)
 
-    st.markdown('<div class="sec">Is work accumulating?</div>'
+    st.markdown('<div class="sec">Is work accumulating? </div>'
                 '<div class="sec-sub">Two readings of the same question, and they answer it '
                 'differently. <b>Net ticket change</b> (bars) is the absolute one: is the pile '
                 'growing or shrinking today, counted in tickets — above the zero line the day '
@@ -233,7 +239,7 @@ with tab_dash:
     # --------------------------------------------------- backlog | TAT trend
     a, b = st.columns(2)
     with a:
-        st.markdown('<div class="sec">Backlog trend</div>'
+        st.markdown('<div class="sec">Backlog trend </div>'
                     '<div class="sec-sub"><b>How big is the total pile of accumulated '
                     'workload?</b> Every ticket still open at 23:59, whatever day it arrived — '
                     'a level, not a flow. Here it never exceeds a few dozen and clears by the '
@@ -241,7 +247,7 @@ with tab_dash:
         st.plotly_chart(charts.backlog_trend(daily), config={"displayModeBar": False},
                         key="ov_backlog")
 
-        st.markdown('<div class="sec">Backlog by age</div>'
+        st.markdown('<div class="sec">Backlog by age </div>'
                     '<div class="sec-sub">How old the open tickets are at the end of the '
                     'selected period. On real data this is the triage order — a pile of '
                     'week-old tickets is a different problem from the same pile an hour '
@@ -273,7 +279,7 @@ with tab_dash:
         else:
             st.info("Nothing is open at the end of this period, so there is no backlog to age.")
     with b:
-        st.markdown('<div class="sec">Turnaround trend</div>'
+        st.markdown('<div class="sec">Turnaround trend </div>'
                     '<div class="sec-sub">Median and P90 turnaround, in minutes.</div>',
                     unsafe_allow_html=True)
         st.plotly_chart(charts.tat_trend(daily), config={"displayModeBar": False},
@@ -299,7 +305,8 @@ with tab_dash:
                                    (b, seg_type, "request_type", "By request type")]:
         with col:
             st.markdown(f'<div class="sec">{title}</div>'
-                        '<div class="sec-sub">Created vs resolved, then median turnaround.</div>',
+                        '<div class="sec-sub">Counts inherit the population caveat; the '
+                        'turnaround bars below them are generated.</div>',
                         unsafe_allow_html=True)
             st.plotly_chart(charts.segment_flow(seg, label), config={"displayModeBar": False},
                             key=f"ov_flow_{label}")
@@ -328,7 +335,7 @@ with tab_analysis:
 
     a, b = st.columns(2)
     with a:
-        st.markdown('<div class="sec">Volume by ticket type</div>'
+        st.markdown('<div class="sec">Volume by ticket type </div>'
                     '<div class="sec-sub">The raw <code>Ticket Type</code> field, unsplit.</div>',
                     unsafe_allow_html=True)
         tt = df["ticket_type"].value_counts()
@@ -336,13 +343,13 @@ with tab_analysis:
                         config={"displayModeBar": False})
     with b:
         other_share = 100 * (~df["queue"].isin(["EN", "International"])).mean()
-        st.markdown('<div class="sec">Daily volume by language queue</div>'
+        st.markdown('<div class="sec">Daily volume by language queue </div>'
                     f'<div class="sec-sub">JA, KO and unclassified are folded into “Other” — '
                     f'{other_share:.1f}% of the tickets in this selection.</div>',
                     unsafe_allow_html=True)
         st.plotly_chart(charts.daily_by_queue(df), config={"displayModeBar": False})
 
-    st.markdown('<div class="sec">Daily volume by request type</div>'
+    st.markdown('<div class="sec">Daily volume by request type </div>'
                 '<div class="sec-sub">The companion to the queue view above. Refund and '
                 'non-refund track each other, so the mix is stable even as total volume '
                 'falls across the window.</div>', unsafe_allow_html=True)
@@ -370,7 +377,7 @@ with tab_analysis:
                 '<div class="sec-sub">When the work arrives, and how often the same booking '
                 'comes back.</div>', unsafe_allow_html=True)
 
-    st.markdown('<div class="sec">When does work actually arrive?</div>'
+    st.markdown('<div class="sec">When does work actually arrive? </div>'
                 '<div class="sec-sub">Average tickets per hour, by weekday and hour of day (UTC). '
                 'Divided by how many times each weekday occurs in the selected window — Saturday '
                 'occurs once in this 13-day extract, every other weekday twice.</div>',
@@ -383,7 +390,7 @@ with tab_analysis:
     st.plotly_chart(charts.arrival_heatmap(hm), config={"displayModeBar": False},
                     key="dd_heatmap")
 
-    st.markdown('<div class="sec">Volume by weekday</div>'
+    st.markdown('<div class="sec">Volume by weekday </div>'
                 '<div class="sec-sub">The same normalisation as the heatmap: tickets per day '
                 'for each weekday, divided by how often that weekday occurs in the selected '
                 'window.</div>', unsafe_allow_html=True)
@@ -395,7 +402,7 @@ with tab_analysis:
 
     a, b = st.columns(2)
     with a:
-        st.markdown('<div class="sec">Repeat contacts — how soon do people write again?</div>'
+        st.markdown('<div class="sec">Repeat contacts — how soon do people write again? </div>'
                     '<div class="sec-sub">Gap between consecutive tickets on the same booking, '
                     'resequenced within the current selection.</div>', unsafe_allow_html=True)
         # contact_seq / gap are frozen over the full extract in the CSV; recompute them
@@ -415,7 +422,7 @@ with tab_analysis:
         else:
             st.info("No repeat contacts in the current selection.")
     with b:
-        st.markdown('<div class="sec">Turnaround distribution</div>'
+        st.markdown('<div class="sec">Turnaround distribution </div>'
                     '<div class="sec-sub">How long tickets take, across the current '
                     'selection.</div>', unsafe_allow_html=True)
         dist = (df["turnaround_minutes_generated"].round().astype(int).value_counts().sort_index()
@@ -473,27 +480,96 @@ with tab_data:
     recontact_median = float(gaps_all.median()) if len(gaps_all) else float("nan")
     recontact_1h = 100 * float((gaps_all < 1).mean()) if len(gaps_all) else 0.0
 
-    st.markdown('<div class="sec">The KPI set I would put in front of each audience</div>'
-                '<div class="sec-sub">Values are for the full extract. The confidence column is the '
-                'point: it says which numbers are safe to act on.</div>', unsafe_allow_html=True)
-    kpi_tbl = pd.DataFrame([
-        ("01 · Operations Overview", "Tickets created / day", "Demand", "Reliable", f"{head['avg_created_per_day']:,.0f}"),
-        ("01 · Operations Overview", "Tickets resolved / day", "Throughput", "Reliable", f"{head['avg_resolved_per_day']:,.0f}"),
-        ("01 · Operations Overview", "Week-on-week demand", "Planning", "Reliable", f"{head['wow_like_for_like_pct']:+.0f}%"),
-        ("01 · Operations Overview", "Repeat-contact rate", "Quality", "Reliable", f"{head['pct_bookings_with_repeat']:.1f}% of bookings"),
-        ("01 · Operations Overview", "Median turnaround", "Service", "BROKEN — generated column", f"{head['median_tat_minutes']:.0f} min"),
-        ("01 · Operations Overview", "Same-day resolution %", "Service", "BROKEN — same generated column", f"{head['pct_resolved_same_day']:.1f}%"),
-        ("01 · Operations Overview", "Backlog carried overnight", "Health", "BROKEN — same generated column", f"{head['carried_overnight']:,}"),
-        ("02 · Drill Down", "Volume + share by language queue", "Mix", "Reliable", f"{df_all['queue'].nunique()} queues"),
-        ("02 · Drill Down", "Volume + share by request category", "Mix", "Reliable", f"{df_all['request_type'].nunique()} categories"),
-        ("02 · Drill Down", "Tickets per booking", "Efficiency", "Reliable", f"{len(df_all) / df_all['booking_id'].nunique():.2f}"),
-        ("02 · Drill Down", "Arrival rate by hour × weekday", "Staffing", "Reliable", f"peak {head['peak_hour_utc']:02d}:00 UTC"),
-        ("02 · Drill Down", "Time to re-contact", "Quality", "Reliable", f"median {recontact_median:.0f} h"),
-        ("02 · Drill Down", "Refund acceptance per booking", "Outcome", "Verify with owner", f"{acc_book:.2f}%"),
-    ], columns=["Where it lives", "Metric", "Answers", "Data confidence", "Value (full extract)"])
-    st.dataframe(kpi_tbl, width="stretch", hide_index=True)
-    st.caption("The confidence column is the point: four of these cannot be trusted until "
-               "the resolution timestamp is fixed.")
+    st.markdown('<div class="sec">Which numbers can be acted on</div>'
+                '<div class="sec-sub">Every metric on this dashboard, judged against the issues '
+                'above. <b>Reliable</b> means the number measures what its name says. '
+                '<b>Not Reliable</b> means it is wrong, measures something narrower than its '
+                'name, or cannot be verified from this data. Nothing currently qualifies as '
+                'reliable, which is why the dashboard carries a warning rather than pills on '
+                'individual charts. <b>Why</b> cites the numbered issues above rather than restating them. Values are for the full extract.</div>',
+                unsafe_allow_html=True)
+
+    kpi_rows = [
+        ("Tickets created / day", "01 · Overview", f"{head['avg_created_per_day']:,.0f}", False,
+         "<b>Issue 2.</b> Exact for the rows present, but automated and still-open "
+         "tickets may never have reached the extract, so this is a floor on demand rather than "
+         "demand."),
+        ("Tickets resolved / day", "01 · Overview", f"{head['avg_resolved_per_day']:,.0f}", False,
+         "<b>Issues 2 &amp; 6.</b> Same population limit, and it counts only tickets created "
+         "inside the range, so the first day of a filtered range under-counts what closed."),
+        ("Backlog / open tickets", "01 · Overview", f"{head['resolutions_after_window']:,}", False,
+         "<b>Issue 2.</b> Nothing in the extract is unresolved, so this counts work crossing "
+         "midnight, not outstanding workload."),
+        ("Net ticket change", "01 · Overview", f"{head['resolutions_after_window']:+,}", False,
+         "<b>Issue 2.</b> Created minus resolved, so both sides sit on the same population."),
+        ("Resolved-to-created ratio", "01 · Overview",
+         f"{head['resolved_to_created_ratio']:.3f}×", False,
+         "<b>Issue 2.</b> Same inputs: the pace is only as real as the population."),
+        ("Median turnaround", "01 · Overview", f"{head['median_tat_minutes']:.0f} min", False,
+         "<b>Issue 1.</b> A median of generated numbers is another generated number."),
+        ("P90 turnaround", "01 · Overview", f"{head['p90_tat_minutes']:.0f} min", False,
+         "<b>Issue 1.</b> And with no real tail, there is nothing for a percentile to expose."),
+        ("Same-day resolution %", "01 · Overview", f"{head['pct_resolved_same_day']:.1f}%", False,
+         "<b>Issue 1.</b> Once the offset is generated, crossing midnight only means arriving "
+         "shortly before it."),
+        ("Backlog by age", "01 · Overview", "&lt; 1h", False,
+         "<b>Issue 1.</b> Nothing can age past the generated 45-minute ceiling, so every open "
+         "ticket lands in one bucket."),
+        ("Week-on-week demand", "01 · Overview", f"{head['wow_like_for_like_pct']:+.0f}%", False,
+         "<b>Issues 2, 3 &amp; 5.</b> Built on the created counts, across a window that "
+         "allows exactly one like-for-like comparison — and issue 6 is the very question it "
+         "would be used to answer."),
+        ("Volume + share by language queue", "02 · Drill Down",
+         f"{df_all['queue'].nunique()} queues", False,
+         "<b>Issue 2.</b> The queue parses cleanly — that is why it is used instead of "
+         "<code>language_dwid</code> (issue 4) — but a share only cancels a filtered population "
+         "if the filter is unrelated to queue, and nothing shows that it is."),
+        ("Volume + share by request type", "02 · Drill Down",
+         f"{df_all['request_type'].nunique()} types", False,
+         "<b>Issues 2 &amp; 9.</b> Same population limit, and the Japanese and Korean queues "
+         "carry no refund split, so the breakdown is not comparable across every queue."),
+        ("Arrival rate by hour × weekday", "02 · Drill Down",
+         f"peak {head['peak_hour_utc']:02d}:00 UTC", False,
+         "<b>Issues 2 &amp; 10.</b> The creation timestamps are sound, but this is the shape of "
+         "the tickets present: automated work need not arrive at the same hours. Days are UTC "
+         "days."),
+        ("Time to re-contact", "02 · Drill Down", f"median {recontact_median:.0f} h", False,
+         "<b>Issue 2.</b> It never touches the resolution field, but a missing ticket "
+         "between two present ones stretches the gap that gets reported."),
+        ("Repeat-contact rate", "01 · Overview",
+         f"{head['pct_bookings_with_repeat']:.1f}% of bookings", False,
+         "<b>Issue 2.</b> A floor: a booking whose follow-up never reached the extract "
+         "looks like one that never came back."),
+        ("Tickets per booking", "02 · Drill Down",
+         f"{len(df_all) / df_all['booking_id'].nunique():.2f}", False,
+         "<b>Issue 2.</b> Rows over distinct bookings, both limited to what the extract "
+         "contains."),
+        ("Refund acceptance per booking", "02 · Drill Down", f"{acc_book:.2f}%", False,
+         "<b>Issue 8.</b> The flags appear on non-refund tickets, and every positive one sits on "
+         "a single-ticket booking, so the booking-level reading cannot be tested here."),
+    ]
+
+    def pill(ok: bool) -> str:
+        label, cls = ("Reliable", "ok") if ok else ("Not Reliable", "bad")
+        return f'<span class="pill pill-{cls}">{label}</span>' 
+
+    rows_html = "".join(
+        f"<tr><td><b>{name}</b></td><td>{where}</td><td class='val'>{value}</td>"
+        f"<td>{pill(ok)}</td><td class='why'>{why}</td></tr>"
+        for name, where, value, ok, why in kpi_rows)
+    st.markdown(
+        "<table class='kpi-table'><thead><tr><th>Metric</th><th>Where</th>"
+        "<th>Value (full extract)</th><th>Verdict</th><th>Why</th></tr></thead>"
+        f"<tbody>{rows_html}</tbody></table>", unsafe_allow_html=True)
+
+    n_ok = sum(1 for r in kpi_rows if r[3])
+    st.caption(
+        f"**{n_ok} of {len(kpi_rows)} metrics are currently reliable.** Two issues do the "
+        "damage. The resolution timestamp is generated, which takes out everything about "
+        "speed. And the population is unverifiable — every row is `processing_type = Manual` "
+        "and every row carries a resolution — which takes out the counts, and with them the "
+        "shares and rates built on top. Confirm the extract is complete and most of this "
+        "table can be re-judged; fix the timestamp and the rest follows.")
 
 # ============================================================== Insights
 with tab_analysis:
@@ -511,7 +587,7 @@ with tab_analysis:
     ins_1h = 100 * float((ins_gaps < 1).mean()) if len(ins_gaps) else 0.0
     c[2].markdown(tile("Re-contacts within 1h", f"{ins_1h:,.0f}", "%",
                        foot="Likely the same unresolved issue"), unsafe_allow_html=True)
-    c[3].markdown(tile("Refund acceptance", f"{acc_book:,.2f}", "%", kind="warn", caution="verify",
+    c[3].markdown(tile("Refund acceptance", f"{acc_book:,.2f}", "%", kind="warn",
                        foot=f"{int((rf_all.groupby('booking_id')['has_accepted_refund'].max() == True).sum())}"  # noqa: E712
                             f" of {rf_all['booking_id'].nunique():,} refund bookings"), unsafe_allow_html=True)
 

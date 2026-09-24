@@ -104,7 +104,7 @@ duplicates, key integrity, the language join, date formats and precision, the sh
 turnaround distribution, categorical domains, and the consistency of fields that describe
 the same thing.
 
-It ends with a prioritised list of **16 data-quality issues**, seven of which affect core
+It ends with a prioritised list of **16 data-quality issues**, eight of which affect core
 metrics, written to `data/clean/data_quality_issues.csv` and displayed on the dashboard's
 *Data & quality* tab — so the findings are maintained in one place rather than retyped.
 
@@ -187,6 +187,12 @@ millisecond — which only happens if it was calculated. The turnaround metrics 
 built exactly as they would be on real data, but they carry a `DATA ISSUES` badge, and the
 column is named `turnaround_minutes_generated` so the status survives into any export.
 Backlog inherits the ceiling: nothing can age beyond 45 minutes.
+
+**The population itself is unverifiable.** Every row is `processing_type = Manual` and
+every row carries a resolution, so tickets handled by automation, or still open, may simply
+be absent — and nothing in the extract bounds how many, because the timestamps that would
+are the generated ones. Counts are therefore floors rather than totals, which is why no
+metric currently qualifies as reliable and the dashboard carries a standing warning.
 
 **The language field defaults to English.** `language_dwid` contradicts the queue on 17.5%
 of tickets, always toward English, and degrades partway through the window. Language

@@ -50,6 +50,28 @@ def css() -> str:
   .kiwi-header .sub {{ font-size: .86rem; color: {INK_SECONDARY}; margin-top: 3px; }}
   .kiwi-header .meta {{ font-size: .78rem; color: {INK_MUTED}; text-align: right; line-height: 1.7; }}
 
+  /* Standing data-quality line under the page header -------------------- */
+  .dq-strip {{ background: #FFF6E5; border: 1px solid #F0D9A8; border-left: 4px solid #E8A33D;
+               border-radius: 10px; padding: 9px 14px; margin: -6px 0 16px;
+               font-size: .84rem; color: {INK_SECONDARY}; line-height: 1.45; }}
+  .dq-strip b {{ color: {INK}; }}
+
+  /* Reliability pills ------------------------------------------------ */
+  .pill {{ display: inline-block; padding: 3px 12px; border-radius: 8px;
+           font-size: .82rem; font-weight: 600; white-space: nowrap; }}
+  .pill-ok  {{ background: #DDF0C6; border: 1px solid #A9D383; color: #2E6B1C; }}
+  .pill-bad {{ background: #FADCD8; border: 1px solid #E8A49B; color: #9B2C1E; }}
+
+  .kpi-table {{ width: 100%; border-collapse: collapse; font-size: .86rem; }}
+  .kpi-table th {{ text-align: left; padding: 8px 12px; color: {INK_MUTED};
+                   font-weight: 600; font-size: .78rem; text-transform: uppercase;
+                   letter-spacing: .04em; border-bottom: 1px solid {CLOUD_DARK}; }}
+  .kpi-table td {{ padding: 9px 12px; border-bottom: 1px solid {CLOUD}; vertical-align: top;
+                   color: {INK}; }}
+  .kpi-table td.why {{ color: {INK_SECONDARY}; font-size: .82rem; }}
+  .kpi-table td.val {{ font-variant-numeric: tabular-nums; white-space: nowrap; }}
+  .kpi-table tr:hover td {{ background: {CLOUD}; }}
+
   /* KPI tiles -------------------------------------------------------- */
   .tile {{
     background: #fff; border: 1px solid {CLOUD_DARK}; border-radius: 12px;

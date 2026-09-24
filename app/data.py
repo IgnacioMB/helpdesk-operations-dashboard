@@ -40,8 +40,13 @@ def _ensure_built() -> None:
 
 
 def clean_mtime() -> float:
-    """Cache key: a new clean table must invalidate whatever is already loaded."""
-    return CLEAN.stat().st_mtime if CLEAN.exists() else 0.0
+    """Cache key: any refreshed input must invalidate whatever is already loaded.
+
+    Both files are watched, not just the ticket table: the issue list is edited on its own
+    whenever the review is re-run, and keying on the tickets alone left the dashboard
+    serving a stale set of findings.
+    """
+    return sum(f.stat().st_mtime for f in (CLEAN, ISSUES) if f.exists())
 
 
 @st.cache_data(show_spinner="Loading helpdesk data…")
