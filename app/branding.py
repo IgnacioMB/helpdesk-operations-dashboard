@@ -1,31 +1,41 @@
-"""Brand chrome: CSS + a code-drawn kiwi.com lockup.
+"""Brand chrome: CSS + the kiwi.com lockup.
 
-NOTE: the wordmark below is drawn in SVG from scratch so the repo carries no
-third-party asset. For the real submission, drop the official kiwi.com logo
-into assets/ and point `logo_svg()` at it.
+The logo in assets/ is the official mark from images.kiwi.com, used unmodified.
 """
+import functools
+import pathlib
+import re
+
 from .theme import (CLOUD, CLOUD_DARK, INK, INK_MUTED, INK_SECONDARY,
                     KIWI_GREEN, KIWI_GREEN_DARK, KIWI_GREEN_WASH, STATUS)
 
+LOGO = pathlib.Path(__file__).resolve().parent.parent / "assets" / "kiwicom-logo.svg"
+# The source file ships width/height that do not match its own viewBox, so the site
+# letterboxes it. Scale from the viewBox instead, or the mark comes out squashed.
+_LOGO_ASPECT = 242.989 / 120
 
+
+@functools.lru_cache(maxsize=8)
 def logo_svg(height: int = 34) -> str:
-    return f"""
-<svg viewBox="0 0 208 44" height="{height}" role="img" aria-label="kiwi.com"
-     xmlns="http://www.w3.org/2000/svg">
-  <rect x="0" y="0" width="44" height="44" rx="13" fill="{KIWI_GREEN}"/>
-  <path d="M14 11 v22 M14 23 l9.5 -10.5 M14 23 l10.5 10.5" stroke="#fff"
-        stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  <circle cx="32.5" cy="14.5" r="2.9" fill="#fff"/>
-  <text x="56" y="31" font-family="system-ui,-apple-system,'Segoe UI',sans-serif"
-        font-size="26" font-weight="700" letter-spacing="-0.6" fill="{INK}">kiwi<tspan
-        fill="{KIWI_GREEN}">.com</tspan></text>
-</svg>"""
+    """The official mark, scaled to `height` with its true aspect ratio preserved."""
+    markup = LOGO.read_text(encoding="utf-8")
+    width = round(height * _LOGO_ASPECT)
+    markup = re.sub(r'\s(width|height)="[^"]*"', "", markup, count=2)
+    return markup.replace(
+        "<svg ",
+        f'<svg width="{width}" height="{height}" role="img" aria-label="kiwi.com" ',
+        1)
 
 
 def css() -> str:
     return f"""
 <style>
-  .block-container {{ padding-top: 1.4rem; padding-bottom: 3rem; max-width: 1400px; }}
+  /* Streamlit Cloud overlays a toolbar (Share / edit / Deploy) on top of the page and
+     reserves no space for it, so 1.4rem let the header card slide underneath it. Zero the
+     header's own height and reserve the space here, which behaves the same locally and
+     when deployed. */
+  [data-testid="stHeader"] {{ background: transparent; height: 0; }}
+  .block-container {{ padding-top: 4.2rem; padding-bottom: 3rem; max-width: 1400px; }}
   #MainMenu, footer {{ visibility: hidden; }}
 
   .kiwi-header {{
