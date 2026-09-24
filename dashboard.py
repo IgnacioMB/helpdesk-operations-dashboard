@@ -116,6 +116,13 @@ with tab_dash:
     last_created = df["created_date"].max()
     chart_spill = int(daily.loc[daily["date"] > last_created, "tickets_resolved"].sum())
     daily = daily[daily["date"] <= last_created].copy()
+    # A day with no tickets in the current selection would otherwise drop out of the frame
+    # entirely, and the trend lines would join the days either side as if they were
+    # adjacent. Reindex across the calendar so an empty day is drawn as zero.
+    daily = (daily.set_index("date")
+             .reindex(pd.date_range(df["created_date"].min(), last_created, freq="D"),
+                      fill_value=0)
+             .rename_axis("date").reset_index())
     daily["carried_overnight"] = (
         df[~df["resolved_same_day"].astype(bool)].groupby("created_date").size()
         .reindex(daily["date"], fill_value=0).values)

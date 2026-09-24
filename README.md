@@ -89,6 +89,8 @@ app/charts.py                  chart builders, one per analytical job
 app/theme.py                   colour tokens and shared plotly layout
 app/branding.py                CSS, header, KPI tile markup
 
+tools/audit_metrics.py         independent recomputation of every dashboard metric
+tools/audit_vs_dashboard.py    asserts the dashboard matches that recomputation
 tools/demo_synthetic_tat.py    reproduces the generated-timestamp evidence
 tools/validate_palette.py      colour-accessibility validator for app/theme.py
 ```
@@ -209,7 +211,35 @@ pipeline uses `Series.quantile`, it uses `numpy.percentile`; where the pipeline 
 series by seven days to find last week's figure, it looks each date up in a freshly
 counted index. A number only one implementation produces is a number nobody has checked.
 
-The dashboard is tested headlessly across filter paths that have broken before — empty
+### Auditing the dashboard's numbers
+
+`verify.py` checks the published tables. It does not check what the dashboard *shows* for a
+given filter selection — that is what these two do:
+
+```bash
+python tools/audit_metrics.py --from 2022-07-01 --to 2022-07-05 --queue EN
+python tools/audit_vs_dashboard.py     # must print "all 9 selections agree"
+```
+
+`audit_metrics.py` recomputes every figure the dashboard reports — tiles, daily series,
+backlog by age, per-segment breakdowns — straight from the raw workbook, for any date range
+and filter combination. It imports nothing from `app/` or `pipeline/` and never reads the
+clean file: queue parsing, turnaround, backlog and percentiles are all re-implemented. Run
+it alongside the dashboard and compare at a glance, or pass `--json` to diff.
+
+`audit_vs_dashboard.py` automates that comparison. It drives the app headlessly across nine
+filter selections, scrapes the numbers actually rendered, and asserts they match the audit —
+the five tiles, the accumulation caption and every row of the daily table. It exits non-zero
+on disagreement, so it works as a pre-commit or CI gate. This is the check that catches a
+filter silently not being applied, or a metric quietly changing definition.
+
+It earned its place on the first run by catching a real defect: a day with no tickets in the
+current selection dropped out of the daily frame entirely, so the trend lines joined the days
+either side as if they were adjacent. Visible only when filtering to a small segment.
+
+### Dashboard smoke tests
+
+The dashboard is also tested headlessly across filter paths that have broken before — empty
 selections, single-language queues, one- and two-day windows:
 
 ```python
