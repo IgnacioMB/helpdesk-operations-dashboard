@@ -23,8 +23,11 @@ from app.branding import css, logo_svg, tile
 from app.data import clean_mtime, load
 from app.metrics import DOW_ORDER, calendar_days, demand_trend, repeat_flag, weekday_occurrences
 
+# The tab icon is kiwi.com's own favicon, not the fruit emoji.
+FAVICON = pathlib.Path(__file__).resolve().parent / "assets" / "kiwicom-favicon.png"
 st.set_page_config(page_title="Kiwi.com Helpdesk — Daily Operations",
-                   page_icon="🥝", layout="wide", initial_sidebar_state="expanded")
+                   page_icon=str(FAVICON) if FAVICON.exists() else "🥝",
+                   layout="wide", initial_sidebar_state="expanded")
 st.markdown(css(), unsafe_allow_html=True)
 
 df_all, issues, head = load(clean_mtime())
