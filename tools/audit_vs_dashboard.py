@@ -111,9 +111,12 @@ def compare(name: str, audit: dict, shown: dict, verbose: bool) -> list[str]:
             print(f"      {field:<34} {got}")
 
     t = audit["tiles"]
+    # Tile labels are part of the contract this test checks: if one is renamed, the
+    # lookup fails loudly rather than silently skipping that tile.
     for label, key in [("Created", "created"), ("Resolved", "resolved"),
-                       ("Backlog", "backlog"), ("Median TAT", "median_tat_min"),
-                       ("P90 TAT", "p90_tat_min")]:
+                       ("Backlog", "backlog"),
+                       ("Median turnaround time", "median_tat_min"),
+                       ("P90 turnaround time", "p90_tat_min")]:
         # tiles are rendered rounded to whole units
         check(f"tile {label}", round(float(t[key])), shown["tiles"].get(label), tol=0.5)
 

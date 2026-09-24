@@ -176,9 +176,9 @@ with tab_dash:
                        foot="How big the pile is — every ticket still open at 23:59 on the "
                             "last day, whenever it arrived"),
                   unsafe_allow_html=True)
-    c[3].markdown(tile("Median TAT", f"{med_tat:,.0f}", "min", kind="warn"),
+    c[3].markdown(tile("Median turnaround time", f"{med_tat:,.0f}", "min", kind="accent"),
                   unsafe_allow_html=True)
-    c[4].markdown(tile("P90 TAT", f"{p90_tat:,.0f}", "min", kind="warn"),
+    c[4].markdown(tile("P90 turnaround time", f"{p90_tat:,.0f}", "min", kind="accent"),
                   unsafe_allow_html=True)
 
     # ------------------------------------------------------------ demand
