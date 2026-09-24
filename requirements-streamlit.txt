@@ -1,0 +1,14 @@
+# Dependencies for the Streamlit dashboard and the build/verify pipeline.
+# The data source review notebook has its own file: requirements-notebook.txt
+#
+#   .venv/bin/python -m pip install -r requirements-streamlit.txt
+#
+# Note: Streamlit Community Cloud auto-detects a file named requirements.txt and
+# cannot be pointed at another name. If this is ever deployed there, add a
+# requirements.txt containing the single line:  -r requirements-streamlit.txt
+
+streamlit>=1.40
+pandas>=2.0
+numpy>=1.24
+plotly>=5.18
+openpyxl>=3.1

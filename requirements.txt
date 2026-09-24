@@ -1,0 +1,15 @@
+# Streamlit Community Cloud auto-detects this filename and cannot be pointed at another,
+# so the dashboard's dependencies are pinned here for deployment.
+#
+# Pinned rather than lower-bounded on purpose: a shared link should not break because a
+# dependency released a new major version months later. These are the versions the
+# dashboard was built and verified against.
+#
+# For local development see requirements-streamlit.txt (app) and
+# requirements-notebook.txt (the two notebooks).
+
+streamlit==1.50.0
+pandas==2.3.3
+numpy==2.0.2
+plotly==7.1.0
+openpyxl==3.1.5

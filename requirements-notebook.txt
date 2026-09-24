@@ -1,0 +1,16 @@
+# Dependencies for data_source_review.ipynb (the data source review notebook).
+# Kept separate from requirements-streamlit.txt: none of this is imported by the
+# Streamlit dashboard, so the app's install stays narrow.
+#
+#   .venv/bin/python -m pip install -r requirements-notebook.txt
+#
+# Versions are the ones the notebook was run and checked against on Python 3.9.6.
+# Lower bounds rather than pins, so a newer Python can resolve freely.
+# Note: matplotlib 3.9.x is the last line supporting Python 3.9; on 3.10+ pip picks
+# a newer release, which the notebook also works with.
+
+pandas>=2.0        # verified with 2.3.3
+numpy>=1.24        # verified with 2.0.2 (pulled in by pandas, pinned here for clarity)
+openpyxl>=3.1      # reads the .xlsx source; verified with 3.1.5
+matplotlib>=3.4    # the two charts; verified with 3.9.4
+ipykernel>=6.29    # kernel for VS Code / Jupyter; verified with 6.31.0

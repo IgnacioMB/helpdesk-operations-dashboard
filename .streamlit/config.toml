@@ -1,0 +1,14 @@
+# Pinned to light so the validated light-mode palette is what actually renders.
+[theme]
+base = "light"
+primaryColor = "#00A58E"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F5F7F9"
+textColor = "#252A31"
+font = "sans serif"
+
+[server]
+headless = true
+
+[browser]
+gatherUsageStats = false

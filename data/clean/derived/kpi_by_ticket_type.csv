@@ -1,0 +1,8 @@
+ticket_type,tickets,tickets_resolved,share_pct,bookings_touching_segment,avg_tat_minutes,median_tat_minutes,p90_tat_minutes,tickets_per_booking,pct_repeat_within_segment,pct_on_bookings_repeating_anywhere,pct_resolved_same_day,tickets_per_window_day
+Helpdesk EN - Non-refund requests,9470,9468,49.12,8831,30.1,30.0,43.0,1.072,12.65,17.06,98.92,728.46
+Helpdesk International - Non-refund requests,5782,5778,29.99,5438,30.04,30.0,43.0,1.063,11.33,16.83,98.91,444.77
+Helpdesk EN - Refund requests,2196,2195,11.39,2142,29.94,30.0,42.0,1.025,4.92,19.17,98.95,168.92
+Helpdesk International - Refund requests,1389,1387,7.21,1350,29.81,30.0,43.0,1.029,5.54,21.02,99.42,106.85
+Helpdesk - KO,236,236,1.22,215,29.33,29.5,42.0,1.098,16.1,17.8,99.15,18.15
+Helpdesk - JA,187,186,0.97,173,29.61,30.0,41.0,1.081,14.97,16.04,98.4,14.38
+Helpdesk communication,18,18,0.09,18,27.83,27.5,42.0,1.0,0.0,55.56,100.0,1.38

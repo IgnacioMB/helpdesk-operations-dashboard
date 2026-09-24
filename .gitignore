@@ -1,0 +1,15 @@
+# Virtualenv — never commit; recreate with requirements-streamlit.txt
+.venv/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
+
+# Streamlit secrets (none used, but never commit them if added)
+.streamlit/secrets.toml

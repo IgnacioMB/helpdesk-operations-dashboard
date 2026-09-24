@@ -1,0 +1,6 @@
+queue,tickets,tickets_resolved,share_pct,bookings_touching_segment,avg_tat_minutes,median_tat_minutes,p90_tat_minutes,tickets_per_booking,pct_repeat_within_segment,pct_on_bookings_repeating_anywhere,pct_resolved_same_day,tickets_per_window_day
+EN,11666,11663,60.51,10692,30.07,30.0,43.0,1.091,15.49,17.46,98.93,897.38
+International,7171,7165,37.2,6605,29.99,30.0,43.0,1.086,14.67,17.64,99.01,551.62
+KO,236,236,1.22,215,29.33,29.5,42.0,1.098,16.1,17.8,99.15,18.15
+JA,187,186,0.97,173,29.61,30.0,41.0,1.081,14.97,16.04,98.4,14.38
+Unclassified,18,18,0.09,18,27.83,27.5,42.0,1.0,0.0,55.56,100.0,1.38

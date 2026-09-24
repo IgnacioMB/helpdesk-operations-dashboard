@@ -1,0 +1,17 @@
+n,priority,issue,detail
+1,Higher,Only resolved tickets are included,"Backlog, net change and the resolved-to-created ratio have nothing to measure."
+2,Higher,The resolved series is cut off at the end of the window,"10 tickets resolve after the last creation day, so the final day of a range is not comparable."
+3,Higher,Short and old history,"13 days, 26 Jun to 8 Jul 2022. A 30-day default view would be mostly empty."
+4,Higher,Turnaround time is synthetic,"Resolution is creation plus 15-45 whole minutes, with identical milliseconds. Label it, do not read it as performance."
+5,Higher,Two conflicting fields describe the language,language_dwid defaults to English and breaks on 4 July. The queue from Ticket Type is used instead.
+6,Higher,Demand falls steadily across the period,"About 2,100 tickets a day down to about 1,050. Confirm it is genuine before reporting it as a trend."
+7,Higher,18 'Helpdesk communication' tickets are a group of their own,"Unknown language, null refund flags, no queue or request type. Labelled Unclassified so they stay visible."
+8,Lower,processing_type is always 'Manual',"Either nothing is automated, or automated tickets are missing from the extract."
+9,Lower,Refund flags are set on some non-refund tickets,"25 and 26 tickets respectively. The flags look booking-level, so they cannot be summed per ticket."
+10,Lower,Japanese and Korean queues are not split by refund,A refund breakdown is not comparable across every queue.
+11,Lower,Dates in the language table are stored inconsistently,"date_valid_from is text, date_valid_to is a date. Placeholder values of 1899 and 2999."
+12,Lower,Two columns in the language table carry nothing,"is_valid is always true, and name and description are identical in all 185 rows."
+13,Observation,Most of the language table is unused,"185 rows, 40 used, 16 of those with fewer than 5 tickets."
+14,Observation,Timestamps are UTC,Every daily figure is a UTC day and will not match a local working day everywhere.
+15,Observation,Timestamps are precise to the millisecond,Spreadsheets display them truncated to the minute. Fine for daily or hourly reporting.
+16,Observation,About 9% of bookings generate more than one ticket,Repeat contact is worth reporting on its own.

@@ -1,0 +1,4 @@
+request_type,tickets,tickets_resolved,share_pct,bookings_touching_segment,avg_tat_minutes,median_tat_minutes,p90_tat_minutes,tickets_per_booking,pct_repeat_within_segment,pct_on_bookings_repeating_anywhere,pct_resolved_same_day,tickets_per_window_day
+Non-refund,15252,15246,79.12,14105,30.08,30.0,43.0,1.081,14.18,16.97,98.92,1173.23
+Refund,3585,3582,18.6,3478,29.89,30.0,43.0,1.031,5.94,19.89,99.14,275.77
+Not specified,441,440,2.29,406,29.39,30.0,42.0,1.086,14.97,18.59,98.87,33.92
